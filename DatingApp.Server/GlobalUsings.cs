@@ -1,0 +1,29 @@
+global using DatingApp.Server.Configuration;
+global using Microsoft.EntityFrameworkCore;
+global using DatingApp.Library.Models;
+global using DatingApp.Server.Data;
+global using Microsoft.AspNetCore.Mvc;
+global using System.ComponentModel.DataAnnotations;
+global using System.Security.Cryptography;
+global using System.Text;
+global using DatingApp.Server.Dtos;
+global using DatingApp.Server.Services;
+global using Microsoft.IdentityModel.Tokens;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using System.Net;
+global using DatingApp.Server.Models;
+global using System.Text.Json;
+global using DatingApp.Server.Extensions;
+global using DatingApp.Server.Middleware;
+global using DatingApp.Server.Data.Seed;
+global using DatingApp.Server.Interfaces;
+global using DatingApp.Server.Data.User;
+global using Microsoft.EntityFrameworkCore.Migrations;
+global using DatingApp.Server.Helpers;
+global using AutoMapper;
+global using AutoMapper.QueryableExtensions;
+
+

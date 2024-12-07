@@ -25,5 +25,8 @@ global using Microsoft.EntityFrameworkCore.Migrations;
 global using DatingApp.Server.Helpers;
 global using AutoMapper;
 global using AutoMapper.QueryableExtensions;
+global using CloudinaryDotNet.Actions;
+global using CloudinaryDotNet;
+global using Microsoft.Extensions.Options;
 
 

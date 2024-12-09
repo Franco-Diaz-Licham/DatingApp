@@ -8,6 +8,7 @@ public static class Services
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         services.AddScoped<IPhotoService, PhotoService>();
+        
         return services;
     }
 }

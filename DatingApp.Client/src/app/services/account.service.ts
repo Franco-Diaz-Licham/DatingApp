@@ -17,7 +17,7 @@ export class AccountService {
 
     }
     
-    private getStandarOptions(): any {
+    getStandarOptions(): any {
         var httpHeaders = new HttpHeaders({
             'Content-Type': 'application/json'
         })
@@ -37,8 +37,23 @@ export class AccountService {
         return this.http.post(url, body, options).pipe(
             map((user: any) => {
                 if(user){
-                    localStorage.setItem('user', JSON.stringify(user));
-                    this.currentUserSource.next(user);
+                    this.setLocalStorageUser(user);
+                }
+            })
+        );
+    }
+    
+    registerUser(username: string, password: string){
+        let url = `${this.baseUrl}/register`
+        let options = this.getStandarOptions();
+        let body = {
+            username: username,
+            password: password
+        }
+        return this.http.post(url, body, options).pipe(
+            map((user: any) => {
+                if(user){
+                    this.setLocalStorageUser(user);
                 }
             })
         );
@@ -49,12 +64,9 @@ export class AccountService {
         this.currentUserSource.next(null);
     }
 
-    setCurrentUser(){
-        var localUser = localStorage.getItem('user');
-        if(localUser){
-            const user: UserModel = JSON.parse(localUser);
-            this.currentUserSource.next(user);
-        }
+    setLocalStorageUser(user: UserModel){
+        localStorage.setItem('user', JSON.stringify(user));
+        this.currentUserSource.next(user);
     }
 
     checkLocalStorageUser(){
@@ -71,22 +83,5 @@ export class AccountService {
     getCurrentUser(){
         this.checkLocalStorageUser();
         return this.currentUser$;
-    }
-
-    registerUser(username: string, password: string){
-        let url = `${this.baseUrl}/register`
-        let options = this.getStandarOptions();
-        let body = {
-            username: username,
-            password: password
-        }
-        return this.http.post(url, body, options).pipe(
-            map((user: any) => {
-                if(user){
-                    localStorage.setItem('user', JSON.stringify(user));
-                    this.currentUserSource.next(user);
-                }
-            })
-        );
     }
 }

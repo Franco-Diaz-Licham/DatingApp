@@ -23,16 +23,16 @@ export class AppComponent implements OnInit {
     public users?: UserModel[];
     public accService: AccountService;
 
-    public constructor(userService: UserService, accService: AccountService) {
+    constructor(userService: UserService, accService: AccountService) {
         this.userService = userService;
         this.accService = accService;
     }
 
-    public ngOnInit(): void {
-        this.accService.setCurrentUser();
+    ngOnInit(): void {
+
     }
 
-    public getData() {
+    getData() {
         this.userService.getAll().subscribe({
             next: (data: any) => {
                 this.users = data;

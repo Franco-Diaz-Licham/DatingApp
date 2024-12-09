@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, numberAttribute } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AccountService } from './account.service';
@@ -54,5 +54,15 @@ export class MembersService {
                 this.members[index] = member;
             })
         );
+    }
+
+    setMainPhoto(photoId: number){
+        const url = this.baseUrl + 'user/set-main-photo/' + photoId;
+        return this.http.put(url, {});
+    }
+
+    deletePhoto(photoId: number){
+        const url = this.baseUrl + 'user/delete-photo/' + photoId;
+        return this.http.delete(url);
     }
 }

@@ -8,9 +8,7 @@
         <div class="row mt-5">
             <ul class="text-danger">
                 @for (error of validationErrors; track $index) {
-                    <li>
-                        {{error}}
-                    </li>
+                    <li>{{error}}</li>
                 }
             </ul>
         </div>

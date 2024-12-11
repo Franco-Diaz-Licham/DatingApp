@@ -19,7 +19,7 @@
                         <a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a>
                     </li>
                 </ul>
-                <img src="{{loginUser?.photoUrl}}" alt="{{loginUser?.username}}" class="mx-2">
+                <img src="{{loginUser?.photoUrl || './user.png'}}" alt="{{loginUser?.username}}" class="mx-2">
                 <div class="dropdown" style="color: whitesmoke;">
                     <div class="dropdown-toggle" data-bs-toggle="dropdown">
                       Welcome {{loginUser?.username}}!

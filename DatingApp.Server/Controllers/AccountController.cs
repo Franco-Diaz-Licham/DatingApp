@@ -6,9 +6,11 @@ public class AccountController : ControllerBase
 {
     private readonly DataContext _db;
     private readonly ITokenService _tokenService;
+    private readonly IMapper _mapper;
 
-    public AccountController(DataContext db, ITokenService tokenService)
+    public AccountController(DataContext db, ITokenService tokenService, IMapper mapper)
     {
+        _mapper = mapper;
         _db = db;
         _tokenService = tokenService;
     }
@@ -16,36 +18,26 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-        if (await UserExists(registerDto.Username))
-            return BadRequest("User already exists");
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (await UserExists(registerDto.Username)) return BadRequest("User already exists");
+        
+        var user = _mapper.Map<UserModel>(registerDto);
+        using var hmac = new HMACSHA512();
+        user.Username = registerDto.Username.ToLower();
+        user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
+        user.PasswordSalt = hmac.Key;
 
-        try
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync();
+
+        var output = new UserDto()
         {
-            using var hmac = new HMACSHA512();
-            var user = new UserModel()
-            {
-                Username = registerDto.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
-            };
+            Username = user.Username,
+            Token = _tokenService.CreateToken(user),
+            KnownAs = user.KnownAs
+        };
 
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
-
-            var output = new UserDto()
-            {
-                Username = user.Username,
-                Token = _tokenService.CreateToken(user)
-            };
-
-            return Ok(output);
-        }
-        catch (Exception ex)
-        {
-            return Problem(ex.Message);
-        }
+        return Ok(output);
     }
 
     [HttpPost("login")]
@@ -69,7 +61,8 @@ public class AccountController : ControllerBase
         {
             Username = user.Username,
             Token = _tokenService.CreateToken(user),
-            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
+            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+            KnownAs = user.KnownAs
         };
 
         return Ok(output);

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { UserModel } from '../Models/userModel';
 import { map, Observable, of, ReplaySubject } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { FormControl } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
@@ -58,6 +59,21 @@ export class AccountService {
             })
         );
     }
+
+
+    register(user: object){
+        let url = `${this.baseUrl}/register`
+        let options = this.getStandarOptions();
+        let body = user;
+        return this.http.post(url, body, options).pipe(
+            map((user: any) => {
+                if(user){
+                    this.setLocalStorageUser(user);
+                }
+            })
+        );
+    }
+
 
     logout(){
         localStorage.removeItem('user');

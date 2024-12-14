@@ -22,12 +22,13 @@ export class NavComponent {
     loginUser?: UserModel;
     currentUser$?: Observable<UserModel>;
 
-    constructor(
-        private accService: AccountService,
-        private router: Router) {
+    constructor(private accService: AccountService, private router: Router) {
         this.accService = accService;
         this.currentUser$ = this.accService.getCurrentUser().pipe(
-            map((data: any) => this.loginUser = data)
+            map((data: any) => {
+                this.loginUser = data;
+                return data;
+            })
         );
     }
 

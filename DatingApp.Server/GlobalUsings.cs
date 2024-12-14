@@ -28,5 +28,6 @@ global using AutoMapper.QueryableExtensions;
 global using CloudinaryDotNet.Actions;
 global using CloudinaryDotNet;
 global using Microsoft.Extensions.Options;
+global using Microsoft.AspNetCore.Mvc.Filters;
 
 

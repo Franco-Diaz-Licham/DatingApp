@@ -15,12 +15,6 @@ export class ListsComponent {
     members?: MemberModel[];
 
     constructor(private memberService: MembersService){
-        this.loadMembers();
-    }
 
-    loadMembers(){
-        this.memberService.getMembers().subscribe({
-            next: (data: any) => this.members = data
-        })
     }
 }

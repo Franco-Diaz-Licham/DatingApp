@@ -22,7 +22,7 @@
                 <img src="{{loginUser?.photoUrl || './user.png'}}" alt="{{loginUser?.username}}" class="mx-2">
                 <div class="dropdown" style="color: whitesmoke;">
                     <div class="dropdown-toggle" data-bs-toggle="dropdown">
-                      Welcome {{loginUser?.username}}!
+                      Welcome {{loginUser?.knownAs || loginUser?.username}}!
                     </div>
                     <ul class="dropdown-menu">
                       <li><a class="dropdown-item" href="#" routerLink="/member/edit">Edit Profile</a></li>

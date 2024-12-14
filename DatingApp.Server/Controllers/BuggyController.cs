@@ -22,8 +22,7 @@ public class BuggyController : Controller
     public ActionResult<UserModel> GetNotFound()
     {
         var thing = _data.Users.Find(-1);
-        if (thing == null)
-            return NotFound();
+        if (thing == null) return NotFound();
         return Ok(thing);
     }
 

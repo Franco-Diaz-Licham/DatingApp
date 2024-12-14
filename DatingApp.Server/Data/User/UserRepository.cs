@@ -1,4 +1,3 @@
-#nullable disable
 namespace DatingApp.Server.Data.User;
 
 public class UserRepository : IUserRepository
@@ -11,19 +10,29 @@ public class UserRepository : IUserRepository
         _mapper = mapper;
     }
 
-    public async Task<MemberDto> GetMemberAsync(string username)
+    public async Task<MemberDto?> GetMemberAsync(string username)
     {
-        return await _db.Users
-            .Where(u => u.Username == username)
-            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-            .SingleOrDefaultAsync();
+        return await _db.Users.Where(u => u.Username == username).ProjectTo<MemberDto>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<MemberDto>> GetMembersAsync()
+    public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams)
     {
-        return await _db.Users
-        .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-        .ToListAsync();
+        var query = _db.Users.AsQueryable();
+        query = query.Where(u => u.Username != userParams.CurrentUserName);
+        query = query.Where(u => u.Gender == userParams.Gender);
+
+        var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+        var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
+
+        query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
+        switch (userParams.OrderBy)
+        {
+            case "created": query = query.OrderByDescending(u => u.Created); break;
+            default: query = query.OrderByDescending(u => u.LastActive); break;
+        }
+        
+        var output = query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider).AsNoTracking();
+        return await PagedList<MemberDto>.CreateAsync(output, userParams.PageNumber, userParams.PageSize);
     }
 
     public async Task<UserModel?> GetUserByIdAsync(int id)
@@ -33,16 +42,12 @@ public class UserRepository : IUserRepository
 
     public async Task<UserModel?> GetUserByUsernameAsync(string username)
     {
-        return await _db.Users
-            .Include(u => u.Photos)
-            .SingleOrDefaultAsync(u => u.Username == username);
+        return await _db.Users.Include(u => u.Photos).SingleOrDefaultAsync(u => u.Username == username);
     }
 
     public async Task<IEnumerable<UserModel>> GetUsersAsync()
     {
-        return await _db.Users
-            .Include(u => u.Photos)
-            .ToListAsync();
+        return await _db.Users.Include(u => u.Photos).ToListAsync();
     }
 
     public async Task<bool> SaveAllAsync()

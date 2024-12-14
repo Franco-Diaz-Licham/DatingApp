@@ -34,7 +34,8 @@ public class AccountController : ControllerBase
         {
             Username = user.Username,
             Token = _tokenService.CreateToken(user),
-            KnownAs = user.KnownAs
+            KnownAs = user.KnownAs,
+            Gender = user.Gender
         };
 
         return Ok(output);
@@ -43,9 +44,7 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _db.Users
-            .Include(p => p.Photos)
-            .SingleOrDefaultAsync(u => u.Username == loginDto.Username);
+        var user = await _db.Users.Include(p => p.Photos).SingleOrDefaultAsync(u => u.Username == loginDto.Username);
 
         if (user == null)
             return Unauthorized("Invalid username");
@@ -62,7 +61,8 @@ public class AccountController : ControllerBase
             Username = user.Username,
             Token = _tokenService.CreateToken(user),
             PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-            KnownAs = user.KnownAs
+            KnownAs = user.KnownAs,
+            Gender = user.Gender
         };
 
         return Ok(output);

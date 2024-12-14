@@ -2,11 +2,12 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MembersService } from '../../services/members.service';
 import { ActivatedRoute } from '@angular/router';
 import { MemberModel } from '../../Models/member';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-member-details',
     standalone: true,
-    imports: [],
+    imports: [CommonModule],
     templateUrl: './member-details.component.html',
     styleUrl: './member-details.component.css'
 })

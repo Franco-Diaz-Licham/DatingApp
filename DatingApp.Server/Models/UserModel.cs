@@ -19,7 +19,7 @@ public class UserModel
     public string Country { get; set; }
     public ICollection<PhotoModel> Photos { get; set; }
 
-    // public int GetAge(){
-    //     return DateOfBirth.CalculateAge();
-    // }
+    public int GetAge(){
+        return DateOfBirth.CalculateAge();
+    }
 }

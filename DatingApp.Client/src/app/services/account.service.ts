@@ -14,9 +14,7 @@ export class AccountService {
     private currentUserSource: ReplaySubject<UserModel | null> = new ReplaySubject(1);
     private currentUser$: Observable<UserModel | null> = this.currentUserSource.asObservable();
 
-    constructor(private http: HttpClient) {
-
-    }
+    constructor(private http: HttpClient) { }
     
     getStandarOptions(): any {
         var httpHeaders = new HttpHeaders({
@@ -60,7 +58,6 @@ export class AccountService {
         );
     }
 
-
     register(user: object){
         let url = `${this.baseUrl}/register`
         let options = this.getStandarOptions();
@@ -73,7 +70,6 @@ export class AccountService {
             })
         );
     }
-
 
     logout(){
         localStorage.removeItem('user');

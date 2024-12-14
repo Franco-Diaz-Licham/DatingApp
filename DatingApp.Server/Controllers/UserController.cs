@@ -1,5 +1,6 @@
 namespace DatingApp.Server.Controllers;
 
+[ServiceFilter(typeof(LogUserActivity))]
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -17,11 +18,21 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<MemberDto>>> GetAllAsync([FromQuery] UserParams? userParams) 
     {
-        var users = await _userRepo.GetMembersAsync();
+        if (userParams == null) userParams = new();
+        var user = await _userRepo.GetUserByUsernameAsync(User.GetUsername()!);
+
+        if(user == null) return BadRequest();
+        userParams.CurrentUserName = user.Username;
+
+        if (string.IsNullOrEmpty(userParams.Gender))
+            userParams.Gender = user.Gender == "male" ? "female" : "male";
+
+        var users = await _userRepo.GetMembersAsync(userParams ?? new());
         if (users.Any() == false)
             return NotFound();
+        Response.AddPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
         return Ok(users);
     }
 
@@ -95,12 +106,13 @@ public class UserController : ControllerBase
 
         if (photo == null) return NotFound();
         if (photo.IsMain) return BadRequest("cannot delete main photo.");
-        if (photo.PublicId != null){
+        if (photo.PublicId != null)
+        {
             var result = await _photoService.DeletePhotoAsync(photo.PublicId);
-            if(result.Error != null) return BadRequest(result.Error.Message);
+            if (result.Error != null) return BadRequest(result.Error.Message);
         }
         user.Photos.Remove(photo);
-        if(await _userRepo.SaveAllAsync()) return Ok();
+        if (await _userRepo.SaveAllAsync()) return Ok();
         return BadRequest();
     }
 }

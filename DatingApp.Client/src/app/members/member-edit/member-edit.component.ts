@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AccountService } from '../../services/account.service';
 import { MemberModel } from '../../Models/member';
 import { UserModel } from '../../Models/userModel';
@@ -7,11 +7,12 @@ import { take } from 'rxjs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { PhotoEditorComponent } from "../photo-editor/photo-editor.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-member-edit',
     standalone: true,
-    imports: [FormsModule, PhotoEditorComponent],
+    imports: [FormsModule, PhotoEditorComponent, CommonModule],
     templateUrl: './member-edit.component.html',
     styleUrl: './member-edit.component.css'
 })
@@ -21,10 +22,7 @@ export class MemberEditComponent implements OnInit {
     member!: MemberModel;
     user?: UserModel;
 
-    constructor(
-        private acctService: AccountService,
-        private memberService: MembersService,
-        private toaster: ToastrService) {
+    constructor(private acctService: AccountService, private memberService: MembersService, private toaster: ToastrService) {
         this.loadUser();
     }
 
@@ -39,8 +37,10 @@ export class MemberEditComponent implements OnInit {
     } 
 
     loadUser() {
-        this.acctService.getCurrentUser().pipe(take(1)).subscribe({
-            next: (data: any) => this.user = data
+        this.acctService.getCurrentUser().subscribe({
+            next: (data: any) => {
+                this.user = data
+            }
         })
     }
 
@@ -50,7 +50,9 @@ export class MemberEditComponent implements OnInit {
         }
 
         this.memberService.getMember(this.user.username).subscribe({
-            next: (data: MemberModel) => {this.member = data; console.log(this.member);}
+            next: (data: MemberModel) => {
+                this.member = data;
+            }
         })
     }
 

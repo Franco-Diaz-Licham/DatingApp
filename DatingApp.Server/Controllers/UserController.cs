@@ -10,7 +10,7 @@ public class UserController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IPhotoService _photoService;
 
-    public UserController(IUserRepository userRepo, IMapper mapper, IPhotoService photoService)
+    public UserController(IUserRepository userRepo, IPhotoService photoService, IMapper mapper)
     {
         _photoService = photoService;
         _userRepo = userRepo;

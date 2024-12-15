@@ -15,6 +15,7 @@ export class ErrorInterseptor implements HttpInterceptor {
                 if (error) {
                     switch (error.status) {
                         case 400:
+                            // validation errors from UI
                             if (error.error.errors) {
                                 const modelStateErrors = [];
                                 for (const key in error.error.errors) {
@@ -24,6 +25,11 @@ export class ErrorInterseptor implements HttpInterceptor {
                                 }
                                 throw modelStateErrors.flat();
                             }
+                            // object errors - coming from API
+                            else if(typeof(error.error === 'object')){
+                                this.toaster.error(error.error, error.status);
+                            }
+                            // general error when api is not reached
                             else {
                                 this.toaster.error('Not a good request', error.status);
                             }

@@ -40,8 +40,8 @@
                 <button class="btn btn-primary" type="submit">Apply Filters</button>
                 <button class="btn btn-info ms-2" (click)="resetFilters()">Reset Filters</button>
                 <div class="btn-group float-right ms-2">
-                    <button class="btn btn-primary" name="orderBy" type="button" btnRadio="lastActive" (click)="loadMembers()" [(ngModel)]="userParams.orderBy">Last Active</button>
-                    <button class="btn btn-primary" name="created" type="button" btnRadio="created" (click)="loadMembers()" [(ngModel)]="userParams.orderBy">Newest</button>
+                    <button class="btn btn-warning" name="orderBy" type="button" btnRadio="lastActive" (click)="loadMembers()" [(ngModel)]="userParams.orderBy">Last Active</button>
+                    <button class="btn btn-success" name="created" type="button" btnRadio="created" (click)="loadMembers()" [(ngModel)]="userParams.orderBy">Newest</button>
                 </div>
             </div>
         </div>
@@ -63,6 +63,5 @@
     <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
         [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
         nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" />
-
 </div>
 }

@@ -117,4 +117,17 @@ export class MembersService {
         const url = this.baseUrl + 'user/delete-photo/' + photoId;
         return this.http.delete(url);
     }
+
+    addLike(username: string){
+        const url = this.baseUrl + 'likes/' + username;
+        return this.http.post(url, {})
+    }
+
+    getLikes(predicate: string, pageNumber: number, pageSize: number){
+        let params = this.getPaginationHeaders(pageNumber, pageSize);
+        params = params.append('predicate', predicate);
+
+        const url = this.baseUrl + 'likes';
+        return this.getPaginatedResults<Partial<MemberModel[]>>(url, params);
+    }
 }

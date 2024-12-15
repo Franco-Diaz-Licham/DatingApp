@@ -1,3 +1,5 @@
+using DatingApp.Server.Data.Repositories.User;
+
 namespace DatingApp.Server.Helpers;
 
 public class LogUserActivity : IAsyncActionFilter

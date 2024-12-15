@@ -1,4 +1,4 @@
-namespace DatingApp.Server.Interfaces;
+namespace DatingApp.Server.Data.Repositories.User;
 
 public interface IUserRepository
 {

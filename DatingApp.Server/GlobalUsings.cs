@@ -19,8 +19,6 @@ global using System.Text.Json;
 global using DatingApp.Server.Extensions;
 global using DatingApp.Server.Middleware;
 global using DatingApp.Server.Data.Seed;
-global using DatingApp.Server.Interfaces;
-global using DatingApp.Server.Data.User;
 global using Microsoft.EntityFrameworkCore.Migrations;
 global using DatingApp.Server.Helpers;
 global using AutoMapper;
@@ -29,5 +27,7 @@ global using CloudinaryDotNet.Actions;
 global using CloudinaryDotNet;
 global using Microsoft.Extensions.Options;
 global using Microsoft.AspNetCore.Mvc.Filters;
+global using DatingApp.Server.Data.Repositories.Likes;
+global using DatingApp.Server.Data.Repositories.User;
 
 

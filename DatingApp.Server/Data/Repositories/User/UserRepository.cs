@@ -1,4 +1,4 @@
-namespace DatingApp.Server.Data.User;
+namespace DatingApp.Server.Data.Repositories.User;
 
 public class UserRepository : IUserRepository
 {
@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
             case "created": query = query.OrderByDescending(u => u.Created); break;
             default: query = query.OrderByDescending(u => u.LastActive); break;
         }
-        
+
         var output = query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider).AsNoTracking();
         return await PagedList<MemberDto>.CreateAsync(output, userParams.PageNumber, userParams.PageSize);
     }

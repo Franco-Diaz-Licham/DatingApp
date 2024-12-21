@@ -13,11 +13,11 @@ export class UserService {
     private user?: UserModel;
 
     constructor(
-        private http: HttpClient, 
+        private http: HttpClient,
         private accService: AccountService) {
-            this.accService.getCurrentUser().subscribe({
-                next: (data: any) => this.user = data
-            });
+        this.accService.getCurrentUser().subscribe({
+            next: (data: any) => this.user = data
+        });
     }
 
     private getStandarOptions(): any {
@@ -31,25 +31,25 @@ export class UserService {
         return output;
     }
 
-    public getAll() {
+    getAll() {
         var url = `${this.baseUrl}`;
         return this.http.get<UserModel[]>(url);
     }
 
-    public get(id: number): any{
+    get(id: number): any {
         var url = `${this.baseUrl}/${id}`;
         return this.http.get<UserModel>(url)
-      }
-    
-      public update(student: UserModel): any {
+    }
+
+    update(student: UserModel): any {
         var url = `${this.baseUrl}/${student.id}`;
         const body = JSON.stringify(student);
         return this.http.put<UserModel>(url, body);
-      }
-    
-      public create(student: UserModel): any {
+    }
+
+    create(student: UserModel): any {
         var url = `${this.baseUrl}`;
         const body = JSON.stringify(student);
         return this.http.post<UserModel>(url, body);
-      }
+    }
 }

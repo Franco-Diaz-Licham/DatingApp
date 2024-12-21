@@ -32,6 +32,7 @@ public class UserController : ControllerBase
         var users = await _userRepo.GetMembersAsync(userParams ?? new());
         if (users.Any() == false)
             return NotFound();
+            
         Response.AddPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
         return Ok(users);
     }

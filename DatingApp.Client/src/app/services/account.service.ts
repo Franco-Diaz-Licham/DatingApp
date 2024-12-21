@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 })
 
 export class AccountService {
+    
     private baseUrl: string = environment.apiUrl + 'account';
     private currentUserSource: ReplaySubject<UserModel | null> = new ReplaySubject(1);
     private currentUser$: Observable<UserModel | null> = this.currentUserSource.asObservable();

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanDeactivate, CanDeactivateFn, GuardResult, MaybeAsync, RouterStateSnapshot } from '@angular/router';
-import { MemberEditComponent } from '../members/member-edit/member-edit.component';
+import { MemberEditComponent } from '../Components/members/member-edit/member-edit.component';
+
 
 @Injectable({
     providedIn: 'root'

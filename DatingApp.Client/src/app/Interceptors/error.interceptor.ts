@@ -1,4 +1,4 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +11,7 @@ export class ErrorInterseptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         var output = next.handle(req).pipe(
-            catchError((error) => {
+            catchError((error: HttpErrorResponse) => {
                 if (error) {
                     switch (error.status) {
                         case 400:
@@ -26,38 +26,33 @@ export class ErrorInterseptor implements HttpInterceptor {
                                 throw modelStateErrors.flat();
                             }
                             // object errors - coming from API
-                            else if(typeof(error.error === 'object')){
-                                this.toaster.error(error.error, error.status);
+                            else if (typeof (error.error === 'object')) {
+                                this.toaster.error(error.error, error.status.toString());
                             }
                             // general error when api is not reached
                             else {
-                                this.toaster.error('Not a good request', error.status);
+                                this.toaster.error('Not a good request', error.status.toString());
                             }
                             break;
                         case 401:
-                            this.toaster.error('Unauthorized', error.status);
+                            this.toaster.error('Unauthorized', error.status.toString());
                             break;
                         case 404:
-                            this.router.navigateByUrl('/not-found')
+                            // Do something if you want a response
                             break;
                         case 500:
-                            const navExtras: NavigationExtras = {
-                                state: {error: error.error}
-                            }
-                            this.router.navigateByUrl('/server-error', navExtras)
+                            const navigationExtras: NavigationExtras = { state: { error: error.error } };
+                            this.router.navigateByUrl('/server-error', navigationExtras);
                             break;
                         default:
-                            this.toaster.error('Something went wrong');
-                            console.log(error);
+                            this.toaster.error('Something went wrong...');
                             break;
                     }
                 }
-
-                return throwError(error);
+                throw error;
             })
         );
         return output;
     }
-
 }
 

@@ -24,7 +24,7 @@ public class UserController : ControllerBase
         var user = await _userRepo.GetUserByUsernameAsync(User.GetUsername()!);
 
         if(user == null) return BadRequest();
-        userParams.CurrentUserName = user.Username;
+        userParams.CurrentUserName = user.UserName;
 
         if (string.IsNullOrEmpty(userParams.Gender))
             userParams.Gender = user.Gender == "male" ? "female" : "male";
@@ -94,7 +94,7 @@ public class UserController : ControllerBase
         user.Photos.Add(photo);
 
         if (await _userRepo.SaveAllAsync())
-            return CreatedAtRoute("GetUser", new { Username = user.Username }, _mapper.Map<PhotoDto>(photo));
+            return CreatedAtRoute("GetUser", new { Username = user.UserName }, _mapper.Map<PhotoDto>(photo));
 
         return BadRequest("Problem upoloading photo");
     }

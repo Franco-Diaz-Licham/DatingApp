@@ -7,6 +7,7 @@ import { provideToastr } from 'ngx-toastr';
 import { ErrorInterseptor } from './Interceptors/error.interceptor';
 import { jwtInterceptor } from './Interceptors/jwt.interceptor';
 import { loadingInterceptor } from './Interceptors/loading.interceptor';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -21,5 +22,6 @@ export const appConfig: ApplicationConfig = {
         provideAnimations(),
         provideToastr({
             positionClass: 'toast-bottom-right'
-        })]
+        }), 
+        BsModalService]
 };

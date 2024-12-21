@@ -5,4 +5,5 @@ export interface UserModel{
     photoUrl: string;
     knownAs: string;
     gender: string;
+    roles: string[];
 }

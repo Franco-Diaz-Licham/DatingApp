@@ -28,7 +28,7 @@ public class MessagesController : ControllerBase
         if (recipient == null) return NotFound();
         if (sender == null) return BadRequest();
 
-        var message = new MessageModel(sender, recipient, sender.Username, recipient.Username, messageDto.Content);
+        var message = new MessageModel(sender, recipient, sender.UserName, recipient.UserName, messageDto.Content);
         _messageRepo.AddMessage(message);
 
         if (await _messageRepo.SaveAllAsync()) return Ok(_mapper.Map<MessageDto>(message));
@@ -57,9 +57,9 @@ public class MessagesController : ControllerBase
     {
         var username = User.GetUsername();
         var message = await _messageRepo.GetMessage(id);
-        if(message.Sender.Username != username && message.Recipient.Username != username) return Unauthorized();
-        if(message.Sender.Username == username) message.SenderDeleted = true;
-        if(message.Recipient.Username == username) message.RecipientDeleted = true;
+        if(message.Sender.UserName != username && message.Recipient.UserName != username) return Unauthorized();
+        if(message.Sender.UserName == username) message.SenderDeleted = true;
+        if(message.Recipient.UserName == username) message.RecipientDeleted = true;
         if(message.SenderDeleted && message.RecipientDeleted) _messageRepo.DeleteMessage(message);
         if(await _messageRepo.SaveAllAsync()) return NoContent();
         return BadRequest("Message could not be deleted...");

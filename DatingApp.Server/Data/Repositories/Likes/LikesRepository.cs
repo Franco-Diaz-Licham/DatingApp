@@ -24,7 +24,7 @@ public class LikesRepository : ILikesRepository
 
     public async Task<PagedList<LikeDto>> GetUserLikes(LikesParams likesParams)
     {
-        var users = _db.Users.OrderBy(u => u.Username).AsQueryable();
+        var users = _db.Users.OrderBy(u => u.UserName).AsQueryable();
         var likes = _db.Likes.AsQueryable();
 
         if (likesParams.Predicate == "liked")

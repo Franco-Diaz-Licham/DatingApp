@@ -5,11 +5,12 @@ import { UserModel } from '../../Models/userModel';
 import { map, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { HasRoleDirective } from '../../directives/has-role.directive';
 
 @Component({
     selector: 'app-nav',
     standalone: true,
-    imports: [FormsModule, CommonModule, RouterLink],
+    imports: [FormsModule, CommonModule, RouterLink, HasRoleDirective],
     templateUrl: './nav.component.html',
     styleUrl: './nav.component.css'
 })

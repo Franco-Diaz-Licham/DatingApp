@@ -4,14 +4,13 @@ import { RouterOutlet } from '@angular/router';
 import { UserService } from './services/user.service';
 import { UserModel } from './Models/userModel';
 import { AccountService } from './services/account.service';
-import { HomeComponent } from "./home/home.component";
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NavComponent } from './Components/nav/nav.component';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, NavComponent, HomeComponent, NgxSpinnerModule],
+    imports: [RouterOutlet, NavComponent, NgxSpinnerModule],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })

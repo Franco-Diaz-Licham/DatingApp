@@ -10,8 +10,10 @@ public static class DatabaseConfig
         try
         {
             var db = services.GetRequiredService<DataContext>();
+            var userManager = services.GetRequiredService<UserManager<UserModel>>();
+            var roleManager = services.GetRequiredService<RoleManager<AppRoleModel>>();
             await db.Database.MigrateAsync();
-            await Seed.SeedUsers(db);
+            await Seed.SeedUsers(userManager, roleManager);
         }
         catch (Exception ex)
         {

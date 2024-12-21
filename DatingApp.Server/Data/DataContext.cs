@@ -1,16 +1,21 @@
 namespace DatingApp.Server.Data;
 
-public class DataContext : DbContext
+public class DataContext : IdentityDbContext<UserModel, AppRoleModel, int, 
+    IdentityUserClaim<int>, AppUserRoleModel, IdentityUserLogin<int>, 
+    IdentityRoleClaim<int>, IdentityUserToken<int>>
 {
     public DataContext(DbContextOptions options):base(options){ }
 
-    public DbSet<UserModel> Users {get; set;}
     public DbSet<UserLikeModel> Likes { get; set; }
     public DbSet<MessageModel> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        // configure identity
+        builder.Entity<UserModel>().HasMany(ur => ur.UserRoles).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).IsRequired();
+        builder.Entity<AppRoleModel>().HasMany(ur => ur.UserRoles).WithOne(u => u.AppRole).HasForeignKey(ur => ur.RoleId).IsRequired();
 
         // to implement M:N relationship, one side followed by the other side
         builder.Entity<UserLikeModel>().HasKey(k => new {k.SourceUserId, k.LikedUserId});

@@ -24,7 +24,7 @@ public class LikesController : ControllerBase
         var sourceUser = await _likesRepo.GetUserWithLikes(sourceUserId);
 
         if (likedUser == null) return NotFound();
-        if (sourceUser.Username == username) return BadRequest("You cannot like yourself");
+        if (sourceUser.UserName == username) return BadRequest("You cannot like yourself");
 
         var userLike = await _likesRepo.GetUserLike(sourceUserId, likedUser.Id);
 

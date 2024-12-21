@@ -8,10 +8,10 @@ import { UserModel } from '../Models/userModel';
 @Injectable({
     providedIn: 'root'
 })
+
 export class AuthGuard implements CanActivate{
-    constructor(
-        private accService: AccountService, 
-        private toaster: ToastrService){}
+
+    constructor(private accService: AccountService,  private toaster: ToastrService){}
 
     canActivate(): Observable<boolean> {
         var output = this.accService.getCurrentUser().pipe(
@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate{
                     return true;
                 }
                 else{
-                    this.toaster.error('you shall not pass');
+                    this.toaster.error('you shall not pass...');
                     return false;
                 }
             })

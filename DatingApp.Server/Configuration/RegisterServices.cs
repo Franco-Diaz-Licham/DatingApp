@@ -9,16 +9,10 @@ public static class RegisterServices
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddServices();
+        services.AddIdentityServices(config);
         services.AddDbContext<DataContext>(opt =>
             opt.UseSqlite(config.GetConnectionString("DefaultConnection")
         ));
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-            opt.TokenValidationParameters = new TokenValidationParameters()
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetValue<string>("TokenKey"))),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            });
+
     }
 }

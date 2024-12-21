@@ -2,21 +2,46 @@ namespace DatingApp.Server.Data.Seed;
 
 public class Seed
 {
-    public static async Task SeedUsers(DataContext data)
+    public static async Task SeedUsers(UserManager<UserModel> userManager, RoleManager<AppRoleModel> roleManager)
     {
-        if (await data.Users.AnyAsync())
-            return;
+        if (await userManager.Users.AnyAsync()) return;
         var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
         var users = JsonSerializer.Deserialize<List<UserModel>>(userData);
+
+        if (users == null) return;
+
+        var roles = new List<AppRoleModel>()
+        {
+            new AppRoleModel{Name = "Admin"},
+            new AppRoleModel{Name = "Moderator"},
+            new AppRoleModel{Name = "Member"},
+        };
+
+        foreach (var role in roles) await roleManager.CreateAsync(role);
+
         foreach (var user in users)
         {
-            using var hmac = new HMACSHA512();
-            user.Username = user.Username.ToLower();
-            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("welcome1"));
-            user.PasswordSalt = hmac.Key;
-            data.Users.Add(user);
+            user.UserName = user.UserName.ToLower();
+            await userManager.CreateAsync(user, "Welcome1");
+            await userManager.AddToRoleAsync(user, "Member");
         }
 
-        await data.SaveChangesAsync();
+        var admin = new UserModel
+        {
+            UserName = "admin",
+            Gender = "male",
+            DateOfBirth = DateTime.Now,
+            KnownAs = string.Empty,
+            Created = DateTime.Now,
+            LastActive = DateTime.Now,
+            Introduction = string.Empty,
+            LookingFor = string.Empty,
+            Interests = string.Empty,
+            City = string.Empty,
+            Country = string.Empty
+        };
+
+        await userManager.CreateAsync(admin, "Welcome1");
+        await userManager.AddToRolesAsync(admin, new [] {"Admin", "Moderator"});
     }
 }

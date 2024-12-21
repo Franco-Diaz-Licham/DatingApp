@@ -31,3 +31,5 @@ global using DatingApp.Server.Data.Repositories.User;
 global using DatingApp.Server.Data.Repositories.Messages;
 global using DatingApp.Server.Models.Entities;
 global using System.ComponentModel.DataAnnotations.Schema;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

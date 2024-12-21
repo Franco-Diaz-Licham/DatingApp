@@ -4,14 +4,16 @@ namespace DatingApp.Server.Controllers;
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
 {
-    private readonly DataContext _db;
+    private readonly UserManager<UserModel> _userManager;
+    private readonly SignInManager<UserModel> _signInManager;
     private readonly ITokenService _tokenService;
     private readonly IMapper _mapper;
 
-    public AccountController(DataContext db, ITokenService tokenService, IMapper mapper)
+    public AccountController(UserManager<UserModel> userManager, SignInManager<UserModel> signInManager, ITokenService tokenService, IMapper mapper)
     {
         _mapper = mapper;
-        _db = db;
+        _userManager = userManager;
+        _signInManager = signInManager;
         _tokenService = tokenService;
     }
 
@@ -20,20 +22,21 @@ public class AccountController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
         if (await UserExists(registerDto.Username)) return BadRequest("User already exists");
-        
-        var user = _mapper.Map<UserModel>(registerDto);
-        using var hmac = new HMACSHA512();
-        user.Username = registerDto.Username.ToLower();
-        user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
-        user.PasswordSalt = hmac.Key;
 
-        _db.Users.Add(user);
-        await _db.SaveChangesAsync();
+        var user = _mapper.Map<UserModel>(registerDto);
+        user.UserName = registerDto.Username.ToLower();
+        var result = await _userManager.CreateAsync(user);
+
+        if (!result.Succeeded) return BadRequest(result.Errors);
+
+        var roleResult = await _userManager.AddToRoleAsync(user, "Member");
+
+        if(!roleResult.Succeeded) return BadRequest(roleResult.Errors);
 
         var output = new UserDto()
         {
-            Username = user.Username,
-            Token = _tokenService.CreateToken(user),
+            Username = user.UserName,
+            Token = await _tokenService.CreateToken(user),
             KnownAs = user.KnownAs,
             Gender = user.Gender
         };
@@ -44,22 +47,18 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _db.Users.Include(p => p.Photos).SingleOrDefaultAsync(u => u.Username == loginDto.Username);
+        var user = await _userManager.Users.Include(p => p.Photos).SingleOrDefaultAsync(u => u.UserName == loginDto.Username.ToLower());
 
-        if (user == null)
-            return Unauthorized("Invalid username");
+        if (user == null) return Unauthorized("Invalid username");
 
-        using var hmac = new HMACSHA512(user.PasswordSalt);
-        var computerHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+        var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-        for (int i = 0; i < computerHash.Length; i++)
-            if (computerHash[i] != user.PasswordHash[i])
-                return Unauthorized("Invalid password");
+        if (!result.Succeeded) return Unauthorized();
 
         var output = new UserDto()
         {
-            Username = user.Username,
-            Token = _tokenService.CreateToken(user),
+            Username = user.UserName,
+            Token = await _tokenService.CreateToken(user),
             PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
             KnownAs = user.KnownAs,
             Gender = user.Gender
@@ -70,7 +69,7 @@ public class AccountController : ControllerBase
 
     private async Task<bool> UserExists(string username)
     {
-        return await _db.Users.AnyAsync(u => u.Username == username.ToLower());
+        return await _userManager.Users.AnyAsync(u => u.UserName == username.ToLower());
     }
 }
 

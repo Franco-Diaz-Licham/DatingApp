@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RegisterComponent } from '../Components/register/register.component';
+import { RegisterComponent } from '../../Components/register/register.component';
 
 
 @Component({

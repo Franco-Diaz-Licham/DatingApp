@@ -33,3 +33,5 @@ global using DatingApp.Server.Models.Entities;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using Microsoft.AspNetCore.SignalR;
+global using DatingApp.Server.SignalR;

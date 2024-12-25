@@ -8,6 +8,8 @@ public class DataContext : IdentityDbContext<UserModel, AppRoleModel, int,
 
     public DbSet<UserLikeModel> Likes { get; set; }
     public DbSet<MessageModel> Messages { get; set; }
+    public DbSet<GroupModel> Groups {get; set;}
+    public DbSet<ConnectionModel> Connections {get; set;}
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

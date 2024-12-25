@@ -1,5 +1,7 @@
 .card{
     border: none;
+    overflow-y: scroll;
+    max-height: 670px;
 }
 
 .chat{

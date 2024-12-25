@@ -7,14 +7,11 @@ import { environment } from '../../environments/environment.development';
 @Injectable({
     providedIn: 'root'
 })
-
 export class UserService {
     private baseUrl: string = environment.apiUrl + 'user';
     private user?: UserModel;
 
-    constructor(
-        private http: HttpClient,
-        private accService: AccountService) {
+    constructor(private http: HttpClient, private accService: AccountService) {
         this.accService.getCurrentUser().subscribe({
             next: (data: any) => this.user = data
         });

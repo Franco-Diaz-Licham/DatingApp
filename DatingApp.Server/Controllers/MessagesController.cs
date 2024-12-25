@@ -17,18 +17,18 @@ public class MessagesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto messageDto)
+    public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto createMessageDto)
     {
         var username = User.GetUsername();
 
-        if (username == messageDto.RecipientUsername.ToLower()) return BadRequest("You cannot send messages to yourself");
+        if (username == createMessageDto.RecipientUsername.ToLower()) return BadRequest("You cannot send messages to yourself");
         var sender = await _userRepo.GetUserByUsernameAsync(username);
-        var recipient = await _userRepo.GetUserByUsernameAsync(messageDto.RecipientUsername);
+        var recipient = await _userRepo.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
 
         if (recipient == null) return NotFound();
         if (sender == null) return BadRequest();
 
-        var message = new MessageModel(sender, recipient, sender.UserName, recipient.UserName, messageDto.Content);
+        var message = new MessageModel(sender, recipient, sender.UserName, recipient.UserName, createMessageDto.Content);
         _messageRepo.AddMessage(message);
 
         if (await _messageRepo.SaveAllAsync()) return Ok(_mapper.Map<MessageDto>(message));
@@ -57,9 +57,10 @@ public class MessagesController : ControllerBase
     {
         var username = User.GetUsername();
         var message = await _messageRepo.GetMessage(id);
-        if(message.Sender.UserName != username && message.Recipient.UserName != username) return Unauthorized();
+        if(message == null) return NotFound("message does not exist...");
+        if(message.Sender!.UserName != username && message.Recipient!.UserName != username) return Unauthorized();
         if(message.Sender.UserName == username) message.SenderDeleted = true;
-        if(message.Recipient.UserName == username) message.RecipientDeleted = true;
+        if(message.Recipient!.UserName == username) message.RecipientDeleted = true;
         if(message.SenderDeleted && message.RecipientDeleted) _messageRepo.DeleteMessage(message);
         if(await _messageRepo.SaveAllAsync()) return NoContent();
         return BadRequest("Message could not be deleted...");

@@ -3,6 +3,17 @@
         <div class="card">
             <img src="{{member.photoUrl || './user.png'}}" alt="{{member.knownAs}}" class="card-img-top img-thumbnail">
             <div class="card-body">
+                @if((presenceService.onlineUsers$ | async)?.includes(member!.username))
+                {
+                <div class="mb-2">
+                    <i class="bi bi-person-circle text-success"></i> Online
+                </div>
+                }
+                @else{
+                    <div class="mb-2">
+                        <i class="bi bi-person-circle text-default"></i> Offline
+                    </div>
+                }
                 <div>
                     <strong>Location:</strong>
                     <p>{{member.city}}, {{member.country}}</p>
@@ -51,7 +62,7 @@
             </tab>
             <tab heading="Messages" (selectTab)="onTabActivated($event)">
                 <div class="mt-2">
-                    <app-member-messages [messages]="messages" [username]="member.username"/>
+                    <app-member-messages [username]="member.username" />
                 </div>
             </tab>
         </tabset>

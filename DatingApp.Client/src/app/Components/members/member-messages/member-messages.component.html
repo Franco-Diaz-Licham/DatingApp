@@ -1,15 +1,15 @@
 <div class="card">
     <div class="card-body">
-        @if(messages.length === 0)
+        @if((messageService.messageThread$ | async)?.length === 0)
         {
         <div>
             No messages yet...
         </div>
         }
-        @if(messages.length > 0)
+        @if((messageService.messageThread$ | async)!.length > 0)
         {
         <ul class="chat">
-            @for (m of messages; track $index)
+            @for (m of (messageService.messageThread$ | async); track $index)
             {
             <li>
                 <div class="chat-card row">

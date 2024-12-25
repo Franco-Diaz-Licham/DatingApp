@@ -1,21 +1,20 @@
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserModel } from '../Models/userModel';
-import { map, Observable, of, ReplaySubject } from 'rxjs';
+import { map, Observable, ReplaySubject } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-import { FormControl } from '@angular/forms';
+import { PresenceService } from './presence.service';
 
 @Injectable({
     providedIn: 'root'
 })
-
 export class AccountService {
     
     private baseUrl: string = environment.apiUrl + 'account';
     private currentUserSource: ReplaySubject<UserModel | null> = new ReplaySubject(1);
     private currentUser$: Observable<UserModel | null> = this.currentUserSource.asObservable();
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private presenceService: PresenceService) { }
     
     getStandarOptions(): any {
         var httpHeaders = new HttpHeaders({
@@ -38,6 +37,7 @@ export class AccountService {
             map((user: any) => {
                 if(user){
                     this.setLocalStorageUser(user);
+                    this.presenceService.createHubConnection(user);
                 }
             })
         );
@@ -54,6 +54,7 @@ export class AccountService {
             map((user: any) => {
                 if(user){
                     this.setLocalStorageUser(user);
+                    this.presenceService.createHubConnection(user);
                 }
             })
         );
@@ -67,6 +68,7 @@ export class AccountService {
             map((user: any) => {
                 if(user){
                     this.setLocalStorageUser(user);
+                    this.presenceService.createHubConnection(user);
                 }
             })
         );
@@ -75,6 +77,7 @@ export class AccountService {
     logout(){
         localStorage.removeItem('user');
         this.currentUserSource.next(null);
+        this.presenceService.stopHubConnection();
     }
 
     setLocalStorageUser(user: UserModel){

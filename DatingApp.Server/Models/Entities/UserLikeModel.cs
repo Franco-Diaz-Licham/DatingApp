@@ -1,5 +1,6 @@
 namespace DatingApp.Server.Models.Entities;
 
+[Table("Likes")]
 public class UserLikeModel
 {
     public UserLikeModel(){}

@@ -23,6 +23,8 @@ public static class ConfigureApp
             .SetIsOriginAllowed(origin => true)
             .AllowCredentials());
         app.UseAuthentication();
+        app.MapHub<PresenceHub>("hubs/presence");
+        app.MapHub<MessageHub>("hubs/messages");
         app.UseAuthorization();
         app.MapControllers();
         app.MapFallbackToFile("/index.html");

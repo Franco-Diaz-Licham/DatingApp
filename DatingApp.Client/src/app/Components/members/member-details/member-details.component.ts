@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MembersService } from '../../../services/members.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MemberModel } from '../../../Models/member';
@@ -7,6 +7,10 @@ import { MemberMessagesComponent } from "../member-messages/member-messages.comp
 import { TabDirective, TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { MessageService } from '../../../services/message.service';
 import { MessageModel } from '../../../Models/message';
+import { PresenceService } from '../../../services/presence.service';
+import { AccountService } from '../../../services/account.service';
+import { UserModel } from '../../../Models/userModel';
+import { take } from 'rxjs';
 
 
 @Component({
@@ -17,14 +21,24 @@ import { MessageModel } from '../../../Models/message';
     styleUrl: './member-details.component.css'
 })
 
-export class MemberDetailsComponent implements OnInit {
+export class MemberDetailsComponent implements OnInit, OnDestroy {
 
     @ViewChild('memberTabs', { static: true }) memberTabs?: TabsetComponent;
     public activeTab?: TabDirective;
     member!: MemberModel;
     messages: MessageModel[] = [];
+    user?: UserModel;
 
-    constructor(private memberService: MembersService, private messageService: MessageService, private route: ActivatedRoute) { }
+    constructor(
+        private memberService: MembersService,
+        private messageService: MessageService,
+        public presenceService: PresenceService,
+        private accountService: AccountService,
+        private route: ActivatedRoute,
+        private router: Router) {
+        this.accountService.getCurrentUser().pipe(take(1)).subscribe(user => this.user = user!);
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    }
 
     ngOnInit(): void {
         this.route.data.subscribe(data => {
@@ -36,6 +50,10 @@ export class MemberDetailsComponent implements OnInit {
         });
 
         // TODO: Get gallery images
+    }
+
+    ngOnDestroy(): void {
+        this.messageService.stopHubConnection();
     }
 
     loadMember() {
@@ -54,7 +72,10 @@ export class MemberDetailsComponent implements OnInit {
         this.activeTab = data;
 
         if (this.activeTab?.heading === 'Messages' && this.messages.length === 0) {
-            this.loadMessages();
+            this.messageService.createHubConnection(this.user!, this.member.username);
+        }
+        else {
+            this.messageService.stopHubConnection();
         }
     }
 

@@ -5,42 +5,38 @@ namespace DatingApp.Server.Controllers;
 [Authorize]
 public class LikesController : ControllerBase
 {
-    private readonly IUserRepository _userRepo;
-    private readonly IMapper _mapper;
-    private readonly ILikesRepository _likesRepo;
-
-    public LikesController(IUserRepository userRepo, ILikesRepository likesRepo, IMapper mapper)
+    private readonly IUnitOfWork _uow;
+    
+    public LikesController(IUnitOfWork uow)
     {
-        _likesRepo = likesRepo;
-        _userRepo = userRepo;
-        _mapper = mapper;
+        _uow = uow;
     }
 
     [HttpPost("{username}")]
     public async Task<ActionResult> AddLike(string username)
     {
         var sourceUserId = User.GetUserId();
-        var likedUser = await _userRepo.GetUserByUsernameAsync(username);
-        var sourceUser = await _likesRepo.GetUserWithLikes(sourceUserId);
+        var likedUser = await _uow.UserRepo.GetUserByUsernameAsync(username);
+        var sourceUser = await _uow.LikesRepo.GetUserWithLikes(sourceUserId);
 
         if (likedUser == null) return NotFound();
         if (sourceUser.UserName == username) return BadRequest("You cannot like yourself");
 
-        var userLike = await _likesRepo.GetUserLike(sourceUserId, likedUser.Id);
+        var userLike = await _uow.LikesRepo.GetUserLike(sourceUserId, likedUser.Id);
 
         if (userLike != null) return BadRequest("You already liked this user");
 
         userLike = new UserLikeModel(sourceUserId, likedUser.Id);
         sourceUser.LikedUsers.Add(userLike);
 
-        if(await _userRepo.SaveAllAsync()) return Ok();
+        if(await _uow.Complete()) return Ok();
         return BadRequest("Failed to liked user");
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<LikeDto>>> GetUserLikes([FromQuery] LikesParams likesParams){
         likesParams.UserId = User.GetUserId();
-        var output = await _likesRepo.GetUserLikes(likesParams);
+        var output = await _uow.LikesRepo.GetUserLikes(likesParams);
         Response.AddPaginationHeader(output.CurrentPage, output.PageSize, output.TotalCount, output.TotalPages);
         return Ok(output);
     }

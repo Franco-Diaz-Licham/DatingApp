@@ -35,3 +35,4 @@ global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.AspNetCore.SignalR;
 global using DatingApp.Server.SignalR;
+global using System.Text.Json.Serialization;

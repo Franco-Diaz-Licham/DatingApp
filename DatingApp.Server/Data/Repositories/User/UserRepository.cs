@@ -50,11 +50,6 @@ public class UserRepository : IUserRepository
         return await _db.Users.Include(u => u.Photos).ToListAsync();
     }
 
-    public async Task<bool> SaveAllAsync()
-    {
-        return await _db.SaveChangesAsync() > 0;
-    }
-
     public void Update(UserModel model)
     {
         _db.Entry(model).State = EntityState.Modified;

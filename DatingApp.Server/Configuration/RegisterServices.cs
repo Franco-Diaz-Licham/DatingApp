@@ -9,10 +9,8 @@ public static class RegisterServices
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddAppServices();
-        services.AddDataServices();
         services.AddIdentityServices(config);
         services.AddSignalR();
         services.AddDbContext<DataContext>(opt => opt.UseSqlite(config.GetConnectionString("DefaultConnection")));
-
     }
 }

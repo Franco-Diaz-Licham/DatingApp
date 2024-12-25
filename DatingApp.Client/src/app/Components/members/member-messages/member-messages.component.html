@@ -8,7 +8,7 @@
         }
         @if((messageService.messageThread$ | async)!.length > 0)
         {
-        <ul class="chat">
+        <ul #scrollMe [scrollTop]="scrollMe.scrollHeight" class="chat">
             @for (m of (messageService.messageThread$ | async); track $index)
             {
             <li>

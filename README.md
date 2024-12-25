@@ -1,6 +1,5 @@
 # Dating App Project
-Dating App is a simple dating application developed using Angular 18 and .NET 6 Web API that replicates a conventional dating application allowing users to meet other people online. It allows the user register and create an account, edit their profile page, like and message other users.
-This project was based on Neil Cummings' Full-stack development course.
+Dating App is a simple dating application developed using Angular 18 and .NET 6 Web API that replicates a conventional dating application allowing users to meet other people online. It allows the user register and create an account, edit their profile page, like and message other users. This project was based on Neil Cummings' Full-stack development course.
 
 # App Features
 * **User Authentication:** Secure registration and authentication process using Microsoft Identity.
@@ -11,10 +10,10 @@ This project was based on Neil Cummings' Full-stack development course.
 
 # Technology Stack
 * **Backend**:
-  * **.NET 8:** The backend foundation for robust server-side development.
+  * **.NET 6:** The backend foundation for robust server-side development.
   * **ASP.NET Core:** A high-performance, open-source framework for building modern, cloud-based, and internet-connected applications.
   * **Entity Framework:** Simplifies database operations and interactions.
-  * **Jwt Bearer Authentication:** Ensures secure and authenticated communication.
+  * **Jwt Bearer Authentication:** Ensures secure, authenticated and authorized communication.
   * **SQLite:** A temporary database solution for efficient data storage.
 
 * **Frontend**:

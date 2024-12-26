@@ -4,7 +4,7 @@ Dating App is a simple dating application developed using Angular 18 and .NET 6 
 # App Features
 * **User Authentication:** Secure registration and authentication process using Microsoft Identity.
 * **Profile Customization:** Personalize your profile to stand out.
-* **Matching Algorithm:** Receive suggestions for potential matches.
+* **Matches:** Receive and like other users.
 * **Real-time Chat:** Connect with matches through a dynamic chat interface.
 * **Responsive Interface:** Enjoy a seamless experience on any device.
 
@@ -17,7 +17,7 @@ Dating App is a simple dating application developed using Angular 18 and .NET 6 
   * **SQLite:** A temporary database solution for efficient data storage.
 
 * **Frontend**:
-  * **Angular 16:** A powerful frontend framework for building dynamic and responsive web applications.
+  * **Angular 18:** A powerful frontend framework for building dynamic and responsive web applications.
   * **Bootstrap 5:** The world's most popular front-end open-source toolkit for designing and customizing responsive and mobile-first sites.
 
 * **Cloud Provider**:

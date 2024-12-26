@@ -7,6 +7,21 @@
     margin-bottom: 10px;
 }
 
+.photos{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 10px;
+}
+
+.photo{
+    width: 15%;
+}
+
+.photo-thumbnail{
+    width: 100%;
+    cursor: pointer;
+}
+
 .card-body{
     padding: 0 25px;
 }
@@ -14,3 +29,4 @@
 .card-footer{
     padding: 10px 15px;
 }
+

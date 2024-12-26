@@ -10,9 +10,9 @@
                 </div>
                 }
                 @else{
-                    <div class="mb-2">
-                        <i class="bi bi-person-circle text-default"></i> Offline
-                    </div>
+                <div class="mb-2">
+                    <i class="bi bi-person-circle text-default"></i> Offline
+                </div>
                 }
                 <div>
                     <strong>Location:</strong>
@@ -55,9 +55,9 @@
                     <p>{{member.interests}}</p>
                 </div>
             </tab>
-            <tab heading="Photos" #photoTab="tab" (selectTab)="onTabActivated($event)">
+            <tab heading="Photos" (selectTab)="onTabActivated($event)">
                 <div class="mt-2">
-                    <p>Photos will go here</p>
+                    Photos go here!
                 </div>
             </tab>
             <tab heading="Messages" (selectTab)="onTabActivated($event)">

@@ -11,6 +11,7 @@ import { PresenceService } from '../../../services/presence.service';
 import { AccountService } from '../../../services/account.service';
 import { UserModel } from '../../../Models/userModel';
 import { take } from 'rxjs';
+import { PhotoModel } from '../../../Models/photo';
 
 
 @Component({
@@ -28,6 +29,11 @@ export class MemberDetailsComponent implements OnInit, OnDestroy {
     member!: MemberModel;
     messages: MessageModel[] = [];
     user?: UserModel;
+    images: PhotoModel[] = [];
+    photoOptions = {
+        arrowEl: true,
+        indexIndicatorSep: ' / ', 
+    }
 
     constructor(
         private memberService: MembersService,
@@ -41,15 +47,14 @@ export class MemberDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.route.data.subscribe(data => {
+        this.route.data.subscribe((data) => {
             this.member = data['member'];
+            this.images =  this.member.photos;
         });
 
         this.route.queryParams.subscribe(params => {
             params['tab'] ? this.selectTab(params['tab']) : this.selectTab(0)
         });
-
-        // TODO: Get gallery images
     }
 
     ngOnDestroy(): void {

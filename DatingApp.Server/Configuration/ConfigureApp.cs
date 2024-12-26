@@ -27,7 +27,7 @@ public static class ConfigureApp
         app.MapHub<MessageHub>("hubs/messages");
         app.UseAuthorization();
         app.MapControllers();
-        app.MapFallbackToFile("/index.html");
+        app.MapFallbackToController("index", "Fallback");
         await app.ConfigureDatabase();
     }
 }

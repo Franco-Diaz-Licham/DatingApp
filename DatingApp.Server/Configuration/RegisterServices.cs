@@ -1,4 +1,6 @@
-﻿namespace DatingApp.Server.Configuration;
+﻿using Serilog;
+
+namespace DatingApp.Server.Configuration;
 
 public static class RegisterServices
 {
@@ -11,6 +13,7 @@ public static class RegisterServices
         services.AddAppServices();
         services.AddIdentityServices(config);
         services.AddSignalR();
+        services.AddSerilog();
         services.AddDbContext<DataContext>(opt => opt.UseSqlite(config.GetConnectionString("DefaultConnection")));
     }
 }

@@ -6,7 +6,7 @@ public class Program
         builder.Services.AddServices(builder.Configuration);
 
         var app = builder.Build();
-        await app.Config();
+        await app.Config(builder);
         await app.RunAsync();
     }
 }

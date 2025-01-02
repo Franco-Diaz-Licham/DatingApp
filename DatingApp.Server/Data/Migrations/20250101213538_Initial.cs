@@ -5,33 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DatingApp.Server.Data.Migrations
 {
-    public partial class IdentityAdded : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Likes_Users_LikedUserId",
-                table: "Likes");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Likes_Users_SourceUserId",
-                table: "Likes");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Messages_Users_RecipientId",
-                table: "Messages");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Messages_Users_SenderId",
-                table: "Messages");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Photos_Users_UserId",
-                table: "Photos");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -81,6 +58,17 @@ namespace DatingApp.Server.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -189,6 +177,103 @@ namespace DatingApp.Server.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Likes",
+                columns: table => new
+                {
+                    SourceUserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    LikedUserId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likes", x => new { x.SourceUserId, x.LikedUserId });
+                    table.ForeignKey(
+                        name: "FK_Likes_AspNetUsers_LikedUserId",
+                        column: x => x.LikedUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Likes_AspNetUsers_SourceUserId",
+                        column: x => x.SourceUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SenderUsername = table.Column<string>(type: "TEXT", nullable: false),
+                    SenderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RecipientUsername = table.Column<string>(type: "TEXT", nullable: false),
+                    RecipientId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Content = table.Column<string>(type: "TEXT", nullable: false),
+                    DateRead = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    MessageSent = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    SenderDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    RecipientDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_AspNetUsers_RecipientId",
+                        column: x => x.RecipientId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Messages_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Url = table.Column<string>(type: "TEXT", nullable: false),
+                    IsMain = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PublicId = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Photos_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Connections",
+                columns: table => new
+                {
+                    ConnectionId = table.Column<string>(type: "TEXT", nullable: false),
+                    Username = table.Column<string>(type: "TEXT", nullable: false),
+                    GroupModelName = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Connections", x => x.ConnectionId);
+                    table.ForeignKey(
+                        name: "FK_Connections_Groups_GroupModelName",
+                        column: x => x.GroupModelName,
+                        principalTable: "Groups",
+                        principalColumn: "Name");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -226,69 +311,34 @@ namespace DatingApp.Server.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Likes_AspNetUsers_LikedUserId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Connections_GroupModelName",
+                table: "Connections",
+                column: "GroupModelName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_LikedUserId",
                 table: "Likes",
-                column: "LikedUserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "LikedUserId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Likes_AspNetUsers_SourceUserId",
-                table: "Likes",
-                column: "SourceUserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Messages_AspNetUsers_RecipientId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_RecipientId",
                 table: "Messages",
-                column: "RecipientId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                column: "RecipientId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Messages_AspNetUsers_SenderId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_SenderId",
                 table: "Messages",
-                column: "SenderId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                column: "SenderId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Photos_AspNetUsers_UserId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Photos_UserId",
                 table: "Photos",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Likes_AspNetUsers_LikedUserId",
-                table: "Likes");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Likes_AspNetUsers_SourceUserId",
-                table: "Likes");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Messages_AspNetUsers_RecipientId",
-                table: "Messages");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Messages_AspNetUsers_SenderId",
-                table: "Messages");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Photos_AspNetUsers_UserId",
-                table: "Photos");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -305,75 +355,25 @@ namespace DatingApp.Server.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Connections");
+
+            migrationBuilder.DropTable(
+                name: "Likes");
+
+            migrationBuilder.DropTable(
+                name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "Photos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Groups");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    City = table.Column<string>(type: "TEXT", nullable: false),
-                    Country = table.Column<string>(type: "TEXT", nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Gender = table.Column<string>(type: "TEXT", nullable: false),
-                    Interests = table.Column<string>(type: "TEXT", nullable: false),
-                    Introduction = table.Column<string>(type: "TEXT", nullable: true),
-                    KnownAs = table.Column<string>(type: "TEXT", nullable: false),
-                    LastActive = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    LookingFor = table.Column<string>(type: "TEXT", nullable: false),
-                    PasswordHash = table.Column<byte[]>(type: "BLOB", nullable: false),
-                    PasswordSalt = table.Column<byte[]>(type: "BLOB", nullable: false),
-                    Username = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Likes_Users_LikedUserId",
-                table: "Likes",
-                column: "LikedUserId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Likes_Users_SourceUserId",
-                table: "Likes",
-                column: "SourceUserId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Messages_Users_RecipientId",
-                table: "Messages",
-                column: "RecipientId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Messages_Users_SenderId",
-                table: "Messages",
-                column: "SenderId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Photos_Users_UserId",
-                table: "Photos",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
     }
 }

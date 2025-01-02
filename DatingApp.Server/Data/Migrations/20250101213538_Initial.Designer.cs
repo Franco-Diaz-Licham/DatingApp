@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingApp.Server.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241221090142_IdentityAdded")]
-    partial class IdentityAdded
+    [Migration("20250101213538_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,6 +59,35 @@ namespace DatingApp.Server.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("DatingApp.Server.Models.Entities.ConnectionModel", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GroupModelName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ConnectionId");
+
+                    b.HasIndex("GroupModelName");
+
+                    b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("DatingApp.Server.Models.Entities.GroupModel", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("DatingApp.Server.Models.Entities.MessageModel", b =>
@@ -351,6 +380,13 @@ namespace DatingApp.Server.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DatingApp.Server.Models.Entities.ConnectionModel", b =>
+                {
+                    b.HasOne("DatingApp.Server.Models.Entities.GroupModel", null)
+                        .WithMany("Connections")
+                        .HasForeignKey("GroupModelName");
+                });
+
             modelBuilder.Entity("DatingApp.Server.Models.Entities.MessageModel", b =>
                 {
                     b.HasOne("DatingApp.Server.Models.Entities.UserModel", "Recipient")
@@ -439,6 +475,11 @@ namespace DatingApp.Server.Data.Migrations
             modelBuilder.Entity("DatingApp.Server.Models.Entities.AppRoleModel", b =>
                 {
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("DatingApp.Server.Models.Entities.GroupModel", b =>
+                {
+                    b.Navigation("Connections");
                 });
 
             modelBuilder.Entity("DatingApp.Server.Models.Entities.UserModel", b =>

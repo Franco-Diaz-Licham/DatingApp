@@ -13,7 +13,7 @@ public static class RegisterServices
         services.AddAppServices();
         services.AddIdentityServices(config);
         services.AddSignalR();
-        services.AddSerilog();
-        services.AddDbContext<DataContext>(opt => opt.UseSqlite(config.GetConnectionString("DefaultConnection")));
+        // services.AddSerilog();
+        services.AddDbContext<DataContext>(opt => opt.UseSqlite(config.GetConnectionString("DefaultConnection")!));
     }
 }

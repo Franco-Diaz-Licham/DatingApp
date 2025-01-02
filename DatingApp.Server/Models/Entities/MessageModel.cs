@@ -4,7 +4,7 @@ namespace DatingApp.Server.Models.Entities;
 public class MessageModel
 {
     public MessageModel() { }
-    
+
     public MessageModel(UserModel sender, UserModel recipient, string senderUsername, string recipientUsername, string content)
     {
         Sender = sender;
@@ -15,11 +15,11 @@ public class MessageModel
     }
 
     public int Id { get; set; }
-    public int SenderId { get; set; }
     public string SenderUsername { get; set; }
+    public int SenderId { get; set; }
     public UserModel? Sender { get; set; }
-    public int RecipientId { get; set; }
     public string RecipientUsername { get; set; }
+    public int RecipientId { get; set; }
     public UserModel? Recipient { get; set; }
     public string Content { get; set; }
     public DateTime? DateRead { get; set; }

@@ -14,5 +14,4 @@ public class UserLikeModel
     public UserModel? SourceUser { get; set; }
     public int LikedUserId { get; set; }
     public UserModel? LikedUser { get; set; }
-
 }

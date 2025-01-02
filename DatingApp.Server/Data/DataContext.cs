@@ -14,10 +14,11 @@ public class DataContext : IdentityDbContext<UserModel, AppRoleModel, int,
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
+        
         // configure identity
         builder.Entity<UserModel>().HasMany(ur => ur.UserRoles).WithOne(u => u.User).HasForeignKey(ur => ur.UserId).IsRequired();
         builder.Entity<AppRoleModel>().HasMany(ur => ur.UserRoles).WithOne(u => u.AppRole).HasForeignKey(ur => ur.RoleId).IsRequired();
+        builder.Entity<UserModel>().HasMany(u => u.Photos).WithOne(u => u.User).HasForeignKey(u => u.UserId);
 
         // to implement M:N relationship, one side followed by the other side
         builder.Entity<UserLikeModel>().HasKey(k => new {k.SourceUserId, k.LikedUserId});

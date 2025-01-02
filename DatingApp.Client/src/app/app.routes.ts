@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { MemberDetailsComponent } from './Components/members/member-details/member-details.component';
 import { AuthGuard } from './guards/auth.guard';
-import { TestErrorsComponent } from './Errors/test-errors/test-errors.component';
-import { NotFoundComponent } from './Errors/not-found/not-found.component';
-import { ServerErrorComponent } from './Errors/server-error/server-error.component';
+import { TestErrorsComponent } from './Components/Errors/test-errors/test-errors.component';
+import { NotFoundComponent } from './Components/Errors/not-found/not-found.component';
+import { ServerErrorComponent } from './Components/Errors/server-error/server-error.component';
 import { PreventUnsavedChangesGuard } from './guards/prevent-unsaved-changes.guard';
 import { ListsComponent } from './Components/lists/lists.component';
 import { MessagesComponent } from './Components/messages/messages.component';

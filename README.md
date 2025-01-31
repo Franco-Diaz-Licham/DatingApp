@@ -25,3 +25,7 @@ Dating App is a simple dating application developed using Angular 18 and .NET 6 
 
 # Overview
 The website has both public pages and some that are hidden behind a login, while some only able to be accessed by admin users. The pages are as follows:
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/95654015-b818-4cb6-91a2-91b4d67120d5" />
+</p>

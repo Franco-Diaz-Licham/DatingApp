@@ -3,7 +3,9 @@ import { PaginatedResult } from "../Models/pagination";
 import { map } from "rxjs";
 
 export function getPaginatedResults<T>(url: string, params: HttpParams, http: HttpClient) {
+    
     const paginatedResult = new PaginatedResult<T>();
+    
     return http.get<T>(url, { observe: 'response', params }).pipe(
         map(response => {
             paginatedResult.result = response.body!;

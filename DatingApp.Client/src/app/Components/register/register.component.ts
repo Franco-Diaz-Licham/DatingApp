@@ -42,7 +42,6 @@ export class RegisterComponent implements OnInit {
                 this.validationErrors = error;
             }
         });
-
     }
 
     initializeForm() {

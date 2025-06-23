@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'api/',
-    hubsUrl: 'hubs/',
+    apiUrl: 'https://apps.norwest.education/retail/api/',
+    hubUrl: 'https://apps.norwest.education/retail/hubs/',
 };

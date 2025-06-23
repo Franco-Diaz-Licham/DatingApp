@@ -30,9 +30,14 @@ public static class ConfigureApp
                                                   .CreateLogger();
         }
 
+        app.UsePathBase("/retail");
         app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
+        app.UseCors(x => 
+            x.AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(origin => true)
+            .AllowCredentials());
         app.UseAuthentication();
         app.MapHub<PresenceHub>("hubs/presence");
         app.MapHub<MessageHub>("hubs/messages");

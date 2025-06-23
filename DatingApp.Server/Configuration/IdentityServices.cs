@@ -15,6 +15,7 @@ public static class IdentityServices
         .AddRoleValidator<RoleValidator<AppRoleModel>>()
         .AddEntityFrameworkStores<DataContext>();
 
+        // authentication
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             // client send token as auth header
@@ -39,6 +40,7 @@ public static class IdentityServices
             };
         });
 
+        // authorisation
         services.AddAuthorization(opt => opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin")));
 
         return services;

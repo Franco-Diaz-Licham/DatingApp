@@ -8,7 +8,7 @@ The application uses Jenkins for the CI/CD pipeline into Azure Container Apps.
 * **Matches:** Receive and like other users.
 * **Real-time Chat:** Connect with matches through a dynamic chat interface.
 * **Responsive Interface:** Enjoy a seamless experience on any device.
-* **CI/CD**: full app lifecycle from development to deployment into Azure Container Apps. Uses SonarQ for code quality checks and Docker for staging and production images.
+* **CI/CD**: full app lifecycle into Azure Container Apps. Uses SonarQ for code quality checks and Docker for staging and production images.
 
 # Technology Stack
 * **Backend**:

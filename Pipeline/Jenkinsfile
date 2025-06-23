@@ -187,7 +187,7 @@ pipeline {
     post {
         success {
             echo "✅ Pipeline COMPLETED."
-            emailext to: 's224899095@deakin.edu.au',
+            emailext to: 'franco.diazlicham@hotmail.com',
                 subject: "Jenkins Pipeline - ✅ SUCCESS: ${currentBuild.fullDisplayName}",
                 body: "The Jenkins pipeline for Task 7.3 Completed successfully. Please find the logs attached.",
                 attachLog: true, 
@@ -195,7 +195,7 @@ pipeline {
         }
         failure {
             echo "❌ Pipeline FAILED."
-            emailext to: 's224899095@deakin.edu.au',
+            emailext to: 'franco.diazlicham@hotmail.com',
                 subject: "Jenkins Pipeline - ❌ FAILED",
                 body: "The Jenkins pipeline for Task 7.3 Failed. Please find the logs attached.",
                 attachLog: true, 

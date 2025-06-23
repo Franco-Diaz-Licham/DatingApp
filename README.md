@@ -7,6 +7,7 @@ Dating App is a simple dating application developed using Angular 18 and .NET 6 
 * **Matches:** Receive and like other users.
 * **Real-time Chat:** Connect with matches through a dynamic chat interface.
 * **Responsive Interface:** Enjoy a seamless experience on any device.
+* **CI/CD**: full app lifecycle from development to deployment into Azure Container Apps.
 
 # Technology Stack
 * **Backend**:

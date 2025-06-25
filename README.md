@@ -1,5 +1,5 @@
 # Dating App Project
-Dating App is a simple dating application developed using Angular 18 and .NET 6 Web API that replicates core features of a conventional dating platform, allowing users to register, edit profiles, like others, and exchange messages.
+Dating App is a full-stack dating application developed using Angular 18 and .NET 6 Web API that replicates core features of a conventional dating platform, allowing users to register, edit profiles, like others, and exchange messages.
 The application uses Jenkins for the CI/CD pipeline into Azure Container Apps.
  
 # App Features
